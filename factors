@@ -2,32 +2,16 @@
 
 import sys
 
-def pollard_rho(n):
-    """Pollard's rho algorithm to find a factor of n."""
-    x, y, d = 2, 2, 1
-    while d == 1:
-        x = (x * x + 1) % n
-        y = (y * y + 1) % n
-        y = (y * y + 1) % n
-        d = gcd(abs(x - y), n)
-    return d
-
 def factorize(num):
     """Factorize the given number into two smaller numbers."""
     if num % 2 == 0:
         return 2, num // 2
 
-    factor = pollard_rho(num)
-    if factor == num:
-        return None
+    for i in range(3, int(num**0.5) + 1, 2):
+        if num % i == 0:
+            return i, num // i
 
-    return factor, num // factor
-
-def gcd(a, b):
-    """Calculate the greatest common divisor using Euclidean algorithm."""
-    while b:
-        a, b = b, a % b
-    return a
+    return None
 
 def main():
     if len(sys.argv) != 2:

@@ -1,0 +1,55 @@
+#!/usr/bin/python3
+
+import sys
+import math
+
+def factorize(number):
+    num = int(number)
+
+    if num < 2:
+        print(f"{num} is not a valid natural number.")
+        return
+
+    print(f"{num}=", end="")
+
+    # Factor out 2 until it becomes odd
+    while num % 2 == 0:
+        print("2*", end="")
+        num //= 2
+
+    # Find and print the other prime factors
+    for i in range(3, int(math.sqrt(num)) + 1, 2):
+        while num % i == 0:
+            print(f"{i}", end="")
+            num //= i
+
+            if num != 1:
+                print("*", end="")
+
+    if num > 1:
+        print(num)
+    else:
+        print()
+
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: ./rsa_factors <file>")
+        sys.exit(1)
+
+    input_file = sys.argv[1]
+    try:
+        with open(input_file, 'r') as file:
+            for line in file:
+                try:
+                    number = line.strip()
+                    factorize(number)
+                except ValueError:
+                    print(f"Invalid number in the file: {line.strip()}")
+
+    except FileNotFoundError:
+        print(f"File '{input_file}' not found.")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
+
