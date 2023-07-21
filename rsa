@@ -1,39 +1,11 @@
 #!/usr/bin/python3
 
 import sys
-import math
-
-def factorize(number):
-    num = int(number)
-
-    if num < 2:
-        print(f"{num} is not a valid natural number.")
-        return
-
-    print(f"{num}=", end="")
-
-    # Factor out 2 until it becomes odd
-    while num % 2 == 0:
-        print("2*", end="")
-        num //= 2
-
-    # Find and print the other prime factors
-    for i in range(3, int(math.sqrt(num)) + 1, 2):
-        while num % i == 0:
-            print(f"{i}", end="")
-            num //= i
-
-            if num != 1:
-                print("*", end="")
-
-    if num > 1:
-        print(num)
-    else:
-        print()
+import gmpy2
 
 def main():
     if len(sys.argv) != 2:
-        print("Usage: ./rsa_factors <file>")
+        print("Usage: python rsa_factors.py <file>")
         sys.exit(1)
 
     input_file = sys.argv[1]
@@ -41,14 +13,26 @@ def main():
         with open(input_file, 'r') as file:
             for line in file:
                 try:
-                    number = line.strip()
-                    factorize(number)
+                    number = int(line.strip())
+                    if number < 2:
+                        print(f"{number} is not a valid natural number.")
+                    else:
+                        p, q = factorize(number)
+                        print(f"{number}={p}*{q}")
                 except ValueError:
                     print(f"Invalid number in the file: {line.strip()}")
 
     except FileNotFoundError:
         print(f"File '{input_file}' not found.")
         sys.exit(1)
+
+def factorize(n):
+    p = gmpy2.next_prime(2)
+    while True:
+        q, r = divmod(n, p)
+        if r == 0:
+            return p, q
+        p = gmpy2.next_prime(p)
 
 if __name__ == "__main__":
     main()
