@@ -4,7 +4,7 @@ import sys
 
 def factorize(num):
     """Factorize the given number into two smaller numbers."""
-    for i in range(2, num):
+    for i in range(2, int(num**0.5) + 1):
         if num % i == 0:
             return i, num // i
     return None
@@ -18,19 +18,22 @@ def main():
     try:
         with open(input_file, 'r') as file:
             for line in file:
-                number = int(line.strip())
-                factors = factorize(number)
-                if factors:
-                    p, q = factors
-                    print(f"{number}={p}*{q}")
-                else:
-                    print(f"{number} is a prime number.")
+                try:
+                    number = int(line.strip())
+                    if number < 2:
+                        print(f"{number} is not a valid natural number.")
+                    else:
+                        factors = factorize(number)
+                        if factors:
+                            p, q = factors
+                            print(f"{number}={p}*{q}")
+                        else:
+                            print(f"{number} is a prime number.")
+                except ValueError:
+                    print(f"Invalid number in the file: {line.strip()}")
 
     except FileNotFoundError:
         print(f"File '{input_file}' not found.")
-        sys.exit(1)
-    except ValueError:
-        print("Invalid number in the file.")
         sys.exit(1)
 
 if __name__ == "__main__":
