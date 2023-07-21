@@ -2,28 +2,24 @@
 
 import sys
 
-def factorize(number):
-    num = int(number)
-
-    for i in range(2, num):
-        if num % i == 0:
-            return f"{num}={num//i}*{i}"
-
-    return None
+def factorize_number(number):
+    divisor = 2
+    while number % divisor != 0:
+        divisor += 1
+    p = number // divisor
+    return f"{number}={p}*{divisor}"
 
 def main():
     if len(sys.argv) != 2:
-        print("Usage: factors <file>")
+        print("Usage: python factors.py <file>")
         sys.exit(1)
 
     input_file = sys.argv[1]
     try:
         with open(input_file, 'r') as file:
             for line in file:
-                number = line.strip()
-                factorization = factorize(number)
-                if factorization:
-                    print(factorization)
+                number = int(line.strip())
+                print(factorize_number(number))
 
     except FileNotFoundError:
         print(f"File '{input_file}' not found.")
